@@ -21,8 +21,6 @@ class LoginViewController: UIViewController {
     
     private lazy var emailContainerView: UIView = {
         let image = #imageLiteral(resourceName: "mail")
-        let tf = UITextField()
-        tf.placeholder = "Email"
         let view = Utilities.inputContainerView(withImage: image, textField: emailTextField)
         return view
     }()
@@ -46,6 +44,22 @@ class LoginViewController: UIViewController {
         return tf
     }()
     
+    private let loginButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Log in", for: .normal)
+        button.setTitleColor(.twitterBlue, for: .normal)
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 5
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        return button
+    }()
+    
+    private let dontHaveAccountButton: UIButton = {
+        let button = Utilities.attributedButton("Don't have an account? ", "Sign up")
+        return button
+    }()
+    
     // MARK: - Lifecycler
     
     override func viewDidLoad() {
@@ -64,13 +78,29 @@ class LoginViewController: UIViewController {
         logoImageView.centerX(inView: view, topAnchor: view.safeAreaLayoutGuide.topAnchor, paddingTop: 12)
         logoImageView.setDimensions(width: 150, height: 150)
         
-        let stackView = UIStackView(arrangedSubviews: [emailContainerView, passwordContainerView])
+        loginButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
+        
+        let stackView = UIStackView(arrangedSubviews: [emailContainerView, passwordContainerView, loginButton])
         stackView.axis = .vertical
-        stackView.spacing = 8
+        stackView.spacing = 20
+        stackView.distribution = .fillEqually
         view.addSubview(stackView)
         stackView.anchor(top: logoImageView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 16, paddingLeft: 16, paddingRight: 16)
+        
+        view.addSubview(dontHaveAccountButton)
+        dontHaveAccountButton.anchor(left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, paddingLeft: 16, paddingBottom: 16, paddingRight: 16, height: 50)
+        dontHaveAccountButton.addTarget(self, action: #selector(handleDontHaveAccount), for: .touchUpInside)
     }
     
     // MARK: - Selecters
+        
+    @objc func handleLogin() {
+        print("Handle login")
+    }
     
+    @objc func handleDontHaveAccount() {
+        print("Handle don't have account button")
+        let controller = RegistrationViewController()
+        navigationController?.pushViewController(controller, animated: true)
+    }
 }

@@ -19,6 +19,33 @@ class LoginViewController: UIViewController {
         return iv
     }()
     
+    private lazy var emailContainerView: UIView = {
+        let image = #imageLiteral(resourceName: "mail")
+        let tf = UITextField()
+        tf.placeholder = "Email"
+        let view = Utilities.inputContainerView(withImage: image, textField: emailTextField)
+        return view
+    }()
+    
+    private lazy var passwordContainerView: UIView = {
+        let image = #imageLiteral(resourceName: "ic_lock_outline_white_2x")
+        let view = Utilities.inputContainerView(withImage: image, textField: passwordTextField)
+        return view
+    }()
+    
+    private let emailTextField: UITextField = {
+        let tf = Utilities.textField(withPlaceholder: "Email")
+        tf.keyboardType = .emailAddress
+        return tf
+    }()
+    
+    private let passwordTextField: UITextField = {
+        let tf = Utilities.textField(withPlaceholder: "Password")
+        tf.keyboardType = .twitter
+        tf.isSecureTextEntry = true
+        return tf
+    }()
+    
     // MARK: - Lifecycler
     
     override func viewDidLoad() {
@@ -36,6 +63,12 @@ class LoginViewController: UIViewController {
         view.addSubview(logoImageView)
         logoImageView.centerX(inView: view, topAnchor: view.safeAreaLayoutGuide.topAnchor, paddingTop: 12)
         logoImageView.setDimensions(width: 150, height: 150)
+        
+        let stackView = UIStackView(arrangedSubviews: [emailContainerView, passwordContainerView])
+        stackView.axis = .vertical
+        stackView.spacing = 8
+        view.addSubview(stackView)
+        stackView.anchor(top: logoImageView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 16, paddingLeft: 16, paddingRight: 16)
     }
     
     // MARK: - Selecters

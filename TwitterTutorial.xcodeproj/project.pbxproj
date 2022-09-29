@@ -20,6 +20,7 @@
 		F46512BF28E3CA0300E1A510 /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46512BE28E3CA0300E1A510 /* ConversationViewController.swift */; };
 		F46512C128E3CA6700E1A510 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46512C028E3CA6700E1A510 /* FeedViewController.swift */; };
 		F479558C28E3FC7B004E6439 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F479558B28E3FC7B004E6439 /* Extensions.swift */; };
+		F4F9135828E5A4270009965C /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F9135728E5A4270009965C /* Utilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		F46512BE28E3CA0300E1A510 /* ConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
 		F46512C028E3CA6700E1A510 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		F479558B28E3FC7B004E6439 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		F4F9135728E5A4270009965C /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				F479558B28E3FC7B004E6439 /* Extensions.swift */,
+				F4F9135728E5A4270009965C /* Utilities.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -217,6 +220,7 @@
 			files = (
 				F4028E4428E5404C004E149F /* LoginViewController.swift in Sources */,
 				F46512BF28E3CA0300E1A510 /* ConversationViewController.swift in Sources */,
+				F4F9135828E5A4270009965C /* Utilities.swift in Sources */,
 				F465129D28E3C78100E1A510 /* AppDelegate.swift in Sources */,
 				F465129F28E3C78100E1A510 /* SceneDelegate.swift in Sources */,
 				F4028E4628E5409E004E149F /* RegistrationViewController.swift in Sources */,

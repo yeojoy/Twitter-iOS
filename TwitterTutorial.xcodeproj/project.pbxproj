@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F4028E4428E5404C004E149F /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4028E4328E5404C004E149F /* LoginViewController.swift */; };
+		F4028E4628E5409E004E149F /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4028E4528E5409E004E149F /* RegistrationViewController.swift */; };
 		F465129D28E3C78100E1A510 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F465129C28E3C78100E1A510 /* AppDelegate.swift */; };
 		F465129F28E3C78100E1A510 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F465129E28E3C78100E1A510 /* SceneDelegate.swift */; };
 		F46512A428E3C78100E1A510 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F46512A228E3C78100E1A510 /* Main.storyboard */; };
@@ -21,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F4028E4328E5404C004E149F /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		F4028E4528E5409E004E149F /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		F465129928E3C78100E1A510 /* TwitterTutorial.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitterTutorial.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F465129C28E3C78100E1A510 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F465129E28E3C78100E1A510 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -47,6 +51,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F4028E4228E54034004E149F /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				F4028E4328E5404C004E149F /* LoginViewController.swift */,
+				F4028E4528E5409E004E149F /* RegistrationViewController.swift */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
 		F465129028E3C78100E1A510 = {
 			isa = PBXGroup;
 			children = (
@@ -106,6 +119,7 @@
 		F46512B328E3C7F900E1A510 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				F4028E4228E54034004E149F /* Authentication */,
 				F46512B628E3C89100E1A510 /* MainTabController.swift */,
 				F46512BA28E3C9EE00E1A510 /* ExploreViewController.swift */,
 				F46512BC28E3C9F700E1A510 /* NotificationViewController.swift */,
@@ -201,9 +215,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4028E4428E5404C004E149F /* LoginViewController.swift in Sources */,
 				F46512BF28E3CA0300E1A510 /* ConversationViewController.swift in Sources */,
 				F465129D28E3C78100E1A510 /* AppDelegate.swift in Sources */,
 				F465129F28E3C78100E1A510 /* SceneDelegate.swift in Sources */,
+				F4028E4628E5409E004E149F /* RegistrationViewController.swift in Sources */,
 				F479558C28E3FC7B004E6439 /* Extensions.swift in Sources */,
 				F46512BD28E3C9F700E1A510 /* NotificationViewController.swift in Sources */,
 				F46512BB28E3C9EE00E1A510 /* ExploreViewController.swift in Sources */,
@@ -367,7 +383,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = me.yeojoy.ios.twitter.TwitterTutorial;
+				PRODUCT_BUNDLE_IDENTIFIER = me.yeojoy.ios.TwitterTutorial;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -394,7 +410,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = me.yeojoy.ios.twitter.TwitterTutorial;
+				PRODUCT_BUNDLE_IDENTIFIER = me.yeojoy.ios.TwitterTutorial;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

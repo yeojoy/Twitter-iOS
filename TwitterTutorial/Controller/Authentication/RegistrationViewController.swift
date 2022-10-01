@@ -6,12 +6,16 @@
 //
 
 import UIKit
+import FirebaseCore
+import FirebaseFirestore
+import FirebaseDatabase
 
 class RegistrationViewController: UIViewController {
 
     // MARK: - Properties
     
     private let imagePicker = UIImagePickerController()
+    private var profileImage: UIImage?
     
     private let plusPhotoButton: UIButton = {
         let button = UIButton(type: .system)
@@ -123,7 +127,28 @@ class RegistrationViewController: UIViewController {
     }
     
     @objc func handleRegistration() {
-        print("Handle Sign up")
+        guard let profileImage = self.profileImage else {
+            print("DEBUG: Please select a profile image.")
+            return
+        }
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        guard let username = usernameTextField.text else { return }
+        guard let fullname = fullNameTextField.text else { return }
+        
+        print("DEBUG: email: \(email)")
+        print("DEBUG: password: \(password)")
+        let authCredential = AuthCredentials(email: email, password: password, fullname: fullname, username: username, profileImage: profileImage)
+        
+        AuthService.shared.registerUser(credentials: authCredential) { (error, refs) in
+            if let e = error {
+                print("DEBUG: Fail to create an account. \(e.localizedDescription)")
+                return
+            }
+            
+            print("DEBUG: Successfully updated user information.")
+            self.handleAlreadyHaveAccount()
+        }
     }
     
     @objc func handleAlreadyHaveAccount() {
@@ -136,6 +161,8 @@ extension RegistrationViewController : UIImagePickerControllerDelegate, UINaviga
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         // an image comes from photo app
         guard let profileImage = info[.editedImage] as? UIImage else { return }
+        self.profileImage = profileImage
+        
         let image = profileImage.withRenderingMode(.alwaysOriginal)
         self.plusPhotoButton.layer.cornerRadius = 128 / 2
         self.plusPhotoButton.layer.masksToBounds = true

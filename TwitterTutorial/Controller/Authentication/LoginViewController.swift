@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class LoginViewController: UIViewController {
     
@@ -95,7 +96,23 @@ class LoginViewController: UIViewController {
     // MARK: - Selecters
         
     @objc func handleLogin() {
-        print("Handle login")
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        
+        AuthService.shared.logUserIn(withEmail: email, password: password) { (result, error) in
+            if let error = error {
+                print("DEBUG: Error is \(error.localizedDescription)")
+                return
+            }
+            
+            guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
+            guard let tabController = window.rootViewController as? MainTabController else { return }
+            tabController.authenticateUserAndCongifureUI()
+            
+            print("DEBUG: successful login in")
+            // Move back to MainTabViewController.
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     @objc func handleDontHaveAccount() {

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class MainTabController: UITabBarController {
 
@@ -22,10 +23,36 @@ class MainTabController: UITabBarController {
     // MARK: - Lifecycler
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        configureViewControllers()
-        configureUI()
+        view.backgroundColor = .twitterBlue
+        authenticateUserAndCongifureUI()
     }
+    
+    
+    
+    // MARK: - API
+    
+    func authenticateUserAndCongifureUI() {
+        if Auth.auth().currentUser == nil {
+            // Need to sign in or sign up
+            print("DEBUG: No user")
+            moveToLoginScreen()
+        } else {
+            // user was signed in.
+            configureViewControllers()
+            configureUI()
+        }
+    }
+    
+    func logUserOut() {
+        do {
+            try Auth.auth().signOut()
+        } catch let error {
+            print("DEBUG: Failed to sign out with error \(error.localizedDescription)")
+        }
+        
+        moveToLoginScreen()
+    }
+    
     
     // MARK: - Helpers
     
@@ -52,8 +79,18 @@ class MainTabController: UITabBarController {
         return nav
     }
     
+    func moveToLoginScreen() {
+        DispatchQueue.main.async {
+            let nav = UINavigationController(rootViewController: LoginViewController())
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true)
+        }
+    }
+    
     // MARK: - Selectors
     @objc func actionButtonTapped() {
         print("123")
+        // TODO: remove the below logUserOut() function
+        logUserOut()
     }
 }

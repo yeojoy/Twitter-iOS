@@ -12,6 +12,16 @@ class MainTabController: UITabBarController {
 
     // MARK: - Properties
     
+    var user: TwitterUser? {
+        didSet {
+            // ****** It's important ******
+            guard let nav = viewControllers?[0] as? UINavigationController else { return }
+            guard let feed = nav.viewControllers.first as? FeedViewController else { return }
+            
+            feed.user = user
+        }
+    }
+    
     let actionButton: UIButton = {
         let button = UIButton(type: .system)
         button.tintColor = .white
@@ -31,6 +41,12 @@ class MainTabController: UITabBarController {
     
     // MARK: - API
     
+    func fetchUser() {
+        UserService.shared.fetchUser { twitterUser in
+            self.user = twitterUser
+        }
+    }
+    
     func authenticateUserAndCongifureUI() {
         if Auth.auth().currentUser == nil {
             // Need to sign in or sign up
@@ -40,6 +56,7 @@ class MainTabController: UITabBarController {
             // user was signed in.
             configureViewControllers()
             configureUI()
+            fetchUser()
         }
     }
     
@@ -89,8 +106,11 @@ class MainTabController: UITabBarController {
     
     // MARK: - Selectors
     @objc func actionButtonTapped() {
-        print("123")
-        // TODO: remove the below logUserOut() function
-        logUserOut()
+        guard let user = user else { return }
+        let nav = UINavigationController(rootViewController: UploadTweetViewController(user: user))
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true)
+        
+//        logUserOut()
     }
 }

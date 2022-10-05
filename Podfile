@@ -8,8 +8,12 @@ target 'TwitterTutorial' do
   # Pods for TwitterTutorial
 	pod 'FirebaseAnalytics'
 	pod 'FirebaseAuth'
-	pod 'FirebaseFirestore'
+	# Firebase realtime db
   pod 'FirebaseDatabase'
+	# Firebase storage
   pod 'FirebaseStorage'
+	
+	# Image Loader library
+	pod 'SDWebImage', '~> 5.0'
 
 end

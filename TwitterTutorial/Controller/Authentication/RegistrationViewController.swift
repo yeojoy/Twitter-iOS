@@ -7,7 +7,6 @@
 
 import UIKit
 import FirebaseCore
-import FirebaseFirestore
 import FirebaseDatabase
 
 class RegistrationViewController: UIViewController {

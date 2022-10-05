@@ -105,7 +105,9 @@ class LoginViewController: UIViewController {
                 return
             }
             
-            guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
+            // since iOS 16, need to use windowScene to get windows object.
+            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+            guard let window = windowScene?.windows.first(where: { $0.isKeyWindow }) else { return }
             guard let tabController = window.rootViewController as? MainTabController else { return }
             tabController.authenticateUserAndCongifureUI()
             

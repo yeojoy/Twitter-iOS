@@ -61,6 +61,19 @@ class LoginViewController: UIViewController {
         return button
     }()
     
+    private let forgotPasswordButton: UIButton = {
+        let button = Utilities.attributedButton("Forgot your password? ", "Click here!")
+        return button
+    }()
+    
+    private let label: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = .white
+        label.textAlignment = .center
+        return label
+    }()
+    
     // MARK: - Lifecycler
     
     override func viewDidLoad() {
@@ -88,9 +101,16 @@ class LoginViewController: UIViewController {
         view.addSubview(stackView)
         stackView.anchor(top: logoImageView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 16, paddingLeft: 16, paddingRight: 16)
         
+        view.addSubview(forgotPasswordButton)
+        forgotPasswordButton.anchor(top: stackView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 16, paddingLeft: 16, paddingRight: 16, height: 48)
+        forgotPasswordButton.addTarget(self, action: #selector(handleForgotPassword), for: .touchUpInside)
+        
         view.addSubview(dontHaveAccountButton)
         dontHaveAccountButton.anchor(left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, paddingLeft: 16, paddingBottom: 16, paddingRight: 16, height: 50)
         dontHaveAccountButton.addTarget(self, action: #selector(handleDontHaveAccount), for: .touchUpInside)
+        
+        view.addSubview(label)
+        label.anchor(left: view.leftAnchor, bottom: dontHaveAccountButton.topAnchor, right: view.rightAnchor, paddingLeft: 16, paddingBottom: 8, paddingRight: 16)
     }
     
     // MARK: - Selecters
@@ -111,14 +131,29 @@ class LoginViewController: UIViewController {
             guard let tabController = window.rootViewController as? MainTabController else { return }
             tabController.authenticateUserAndCongifureUI()
             
-            print("DEBUG: successful login in")
             // Move back to MainTabViewController.
             self.dismiss(animated: true, completion: nil)
         }
     }
     
+    @objc func handleForgotPassword() {
+        // To use this, type email address. If possible, check email validation
+        // Notify user to check email box. If there is no one, check spam mail box.
+        // If changing was done, try to log in again with new password.
+        guard let email = emailTextField.text else { return }
+        Auth.auth().sendPasswordReset(withEmail: email) { error in
+            if let error = error {
+                print("DEBUG: sendPasswordReset has occurred an error, \(error)")
+                self.label.text = error.localizedDescription
+                return
+            }
+            
+            self.label.text = "Please check your email and then reset your password"
+        }
+        // TODO notify user to check a spam mail box to reset it. Then change it.
+    }
+    
     @objc func handleDontHaveAccount() {
-        print("Handle don't have account button")
         let controller = RegistrationViewController()
         navigationController?.pushViewController(controller, animated: true)
     }

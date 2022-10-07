@@ -70,6 +70,7 @@ class LoginViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .white
+        label.textAlignment = .center
         return label
     }()
     
@@ -143,11 +144,12 @@ class LoginViewController: UIViewController {
         Auth.auth().sendPasswordReset(withEmail: email) { error in
             if let error = error {
                 print("DEBUG: sendPasswordReset has occurred an error, \(error)")
+                self.label.text = error.localizedDescription
+                return
             }
+            
+            self.label.text = "Please check your email and then reset your password"
         }
-        
-        label.text = "Please check your email and then reset your password"
-        
         // TODO notify user to check a spam mail box to reset it. Then change it.
     }
     

@@ -37,8 +37,6 @@ class MainTabController: UITabBarController {
         authenticateUserAndCongifureUI()
     }
     
-    
-    
     // MARK: - API
     
     func fetchUser() {
@@ -106,11 +104,11 @@ class MainTabController: UITabBarController {
     
     // MARK: - Selectors
     @objc func actionButtonTapped() {
-        guard let user = user else { return }
-        let nav = UINavigationController(rootViewController: UploadTweetViewController(user: user))
-        nav.modalPresentationStyle = .fullScreen
-        present(nav, animated: true)
+//        guard let user = user else { return }
+//        let nav = UINavigationController(rootViewController: UploadTweetViewController(user: user))
+//        nav.modalPresentationStyle = .fullScreen
+//        present(nav, animated: true)
         
-//        logUserOut()
+        logUserOut()
     }
 }

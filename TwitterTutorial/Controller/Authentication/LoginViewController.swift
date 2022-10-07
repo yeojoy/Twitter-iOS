@@ -101,7 +101,7 @@ class LoginViewController: UIViewController {
         stackView.anchor(top: logoImageView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 16, paddingLeft: 16, paddingRight: 16)
         
         view.addSubview(forgotPasswordButton)
-        forgotPasswordButton.anchor(top: stackView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 16, paddingLeft: 16, paddingRight: 16)
+        forgotPasswordButton.anchor(top: stackView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 16, paddingLeft: 16, paddingRight: 16, height: 48)
         forgotPasswordButton.addTarget(self, action: #selector(handleForgotPassword), for: .touchUpInside)
         
         view.addSubview(dontHaveAccountButton)
@@ -130,21 +130,29 @@ class LoginViewController: UIViewController {
             guard let tabController = window.rootViewController as? MainTabController else { return }
             tabController.authenticateUserAndCongifureUI()
             
-            print("DEBUG: successful login in")
             // Move back to MainTabViewController.
             self.dismiss(animated: true, completion: nil)
         }
     }
     
-    @objc func handleDontHaveAccount() {
-        print("Handle don't have account button")
-        let controller = RegistrationViewController()
-        navigationController?.pushViewController(controller, animated: true)
+    @objc func handleForgotPassword() {
+        // To use this, type email address. If possible, check email validation
+        // Notify user to check email box. If there is no one, check spam mail box.
+        // If changing was done, try to log in again with new password.
+        guard let email = emailTextField.text else { return }
+        Auth.auth().sendPasswordReset(withEmail: email) { error in
+            if let error = error {
+                print("DEBUG: sendPasswordReset has occurred an error, \(error)")
+            }
+        }
+        
+        label.text = "Please check your email and then reset your password"
+        
+        // TODO notify user to check a spam mail box to reset it. Then change it.
     }
     
-    @objc func handleForgotPassword() {
-        guard let email = emailTextField.text else { return }
-        Auth.auth().sendPasswordReset(withEmail: email)
-        label.text = "Please check your email and then reset your password"
+    @objc func handleDontHaveAccount() {
+        let controller = RegistrationViewController()
+        navigationController?.pushViewController(controller, animated: true)
     }
 }

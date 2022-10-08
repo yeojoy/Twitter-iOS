@@ -40,7 +40,8 @@ class MainTabController: UITabBarController {
     // MARK: - API
     
     func fetchUser() {
-        UserService.shared.fetchUser { twitterUser in
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        UserService.shared.fetchUser(uid: uid) { twitterUser in
             self.user = twitterUser
         }
     }
@@ -79,7 +80,8 @@ class MainTabController: UITabBarController {
     }
     
     func configureViewControllers() {
-        let feed = templateNavigationController(image: UIImage(named: "home_unselected"), rootViewController: FeedViewController())
+        // feed uses UICollectionViewFlowLayout
+        let feed = templateNavigationController(image: UIImage(named: "home_unselected"), rootViewController: FeedViewController(collectionViewLayout: UICollectionViewFlowLayout()))
         let explore = templateNavigationController(image: UIImage(named: "search_unselected"), rootViewController: ExploreViewController())
         let noti = templateNavigationController(image: UIImage(named: "like_unselected"), rootViewController: NotificationViewController())
         let conversation = templateNavigationController(image: UIImage(named: "ic_mail_outline_white_2x-1"), rootViewController: ConversationViewController())

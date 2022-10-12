@@ -10,6 +10,7 @@ import FirebaseStorage
 
 private let TABLE_USERS = "users"
 private let TABLE_TWEETS = "tweets"
+private let TABLE_USER_TWEETS = "user-tweets"
 private let STORAGE_DIR = "profile_images"
 
 // Firebase Storage
@@ -20,6 +21,7 @@ let STORAGE_PROFILE_IMAGES = STORAGE_REF.child(STORAGE_DIR)
 private let DB_REF = Database.database().reference()
 let REF_USERS = DB_REF.child(TABLE_USERS)
 let REF_TWEETS = DB_REF.child(TABLE_TWEETS)
+let REF_USER_TWEETS = DB_REF.child(TABLE_USER_TWEETS)
 
 // Realtime Table Field
 let DB_FIELD_USERNAME = "username"

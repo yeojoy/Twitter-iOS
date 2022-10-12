@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseAuth
 
 struct TwitterUser {
     let username: String
@@ -13,6 +14,8 @@ struct TwitterUser {
     let fullname: String
     let profileImageUrl: URL?
     let uid: String
+    
+    var isCurrentUser: Bool { return Auth.auth().currentUser?.uid == uid }
     
     init(uid: String, dict: [String: AnyObject]) {
         self.uid = uid

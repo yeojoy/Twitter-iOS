@@ -77,6 +77,9 @@ class MainTabController: UITabBarController {
         actionButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, paddingBottom: 64, paddingRight: 16, width: 56, height: 56)
         actionButton.layer.cornerRadius = 56 / 2
         actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
+        
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(actionButtonLongTapped))
+        actionButton.addGestureRecognizer(longPressGesture)
     }
     
     func configureViewControllers() {
@@ -106,11 +109,22 @@ class MainTabController: UITabBarController {
     
     // MARK: - Selectors
     @objc func actionButtonTapped() {
-//        guard let user = user else { return }
-//        let nav = UINavigationController(rootViewController: UploadTweetViewController(user: user))
-//        nav.modalPresentationStyle = .fullScreen
-//        present(nav, animated: true)
-        
-        logUserOut()
+        print("DEBUG: actionButtonTapped()")
+        guard let user = user else { return }
+        let nav = UINavigationController(rootViewController: UploadTweetViewController(user: user))
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true)
+    }
+    
+    @objc func actionButtonLongTapped(gestureRecognizer: UILongPressGestureRecognizer) {
+        print("DEBUG: actionButtonLongTapped()")
+        if (gestureRecognizer.state == .ended) {
+            print("DEBUG: actionButtonLongTapped() Ended")
+            logUserOut()
+        } else if (gestureRecognizer.state == .began) {
+            print("DEBUG: actionButtonLongTapped() began")
+        } else {
+            print("DEBUG: actionButtonLongTapped() changed")
+        }
     }
 }

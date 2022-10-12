@@ -7,6 +7,14 @@
 
 import UIKit
 
+protocol TweetCellDelegate: AnyObject {
+    func handleProfileImageTapped(cell: TweetCell)
+    func handleCommentTapped(cell: TweetCell)
+    func handleRetweetTapped(cell: TweetCell)
+    func handleLikeTapped(cell: TweetCell)
+    func handleShareTapped(cell: TweetCell)
+}
+
 class TweetCell: UICollectionViewCell {
     
     // MARK: - Properties
@@ -17,12 +25,14 @@ class TweetCell: UICollectionViewCell {
         }
     }
     
+    weak var delegate: TweetCellDelegate?
+    
     private let profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.clipsToBounds = true
         iv.setDimensions(width: 48, height: 48)
-        iv.backgroundColor = .twitterBlue
+        iv.backgroundColor = .white
         iv.layer.cornerRadius = 48 / 2
         return iv
     }()
@@ -85,21 +95,23 @@ class TweetCell: UICollectionViewCell {
     // MARK: - Selectors
     
     @objc func handleCommentTapped() {
-        print("DEBUG: - handleCommentTapped")
-
+        delegate?.handleCommentTapped(cell: self)
     }
     
     @objc func handleRetweetTapped() {
-        print("DEBUG: - handleRetweetTapped")
-        
+        delegate?.handleRetweetTapped(cell: self)
     }
     
     @objc func handleLikeTapped() {
-        print("DEBUG: - handleLikeTapped")
+        delegate?.handleLikeTapped(cell: self)
     }
     
     @objc func handleShareTapped() {
-        print("DEBUG: - handleShareTapped")
+        delegate?.handleShareTapped(cell: self)
+    }
+    
+    @objc func handleTapImageProfile() {
+        delegate?.handleProfileImageTapped(cell: self)
     }
     
     // MARK: - Helpers
@@ -133,6 +145,10 @@ class TweetCell: UICollectionViewCell {
         retweetButton.addTarget(self, action: #selector(handleRetweetTapped), for: .touchUpInside)
         likeButton.addTarget(self, action: #selector(handleLikeTapped), for: .touchUpInside)
         shareButton.addTarget(self, action: #selector(handleShareTapped), for: .touchUpInside)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTapImageProfile))
+        profileImageView.addGestureRecognizer(tap)
+        profileImageView.isUserInteractionEnabled = true
     }
     
     private func configureTweet() {

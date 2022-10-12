@@ -22,14 +22,17 @@ struct TweetService {
             DB_FILED_CAPTION: caption
         ] as [String: Any]
         
-        REF_TWEETS.childByAutoId().updateChildValues(values, withCompletionBlock: completion)
+        REF_TWEETS.childByAutoId().updateChildValues(values) { (err, ref) in
+            guard let tweetId = ref.key else { return }
+            REF_USER_TWEETS.child(uid).updateChildValues([tweetId: 1], withCompletionBlock: completion)
+        }
     }
     
     func fetchTweets(completion: @escaping([Tweet]) -> Void) {
         var tweets = [Tweet]()
         tweets.removeAll()
         
-        REF_TWEETS.observe(.childAdded) { snapshot, _ in
+        REF_TWEETS.observe(.childAdded) { snapshot in
             guard let dictionary = snapshot.value as? [String: Any] else { return }
             guard let uid = dictionary["uid"] as? String else { return }
             let tweetId = snapshot.key
@@ -38,6 +41,25 @@ struct TweetService {
                 let tweet = Tweet(tweetId: tweetId, user: user, dictionary: dictionary)
                 tweets.append(tweet)
                 completion(tweets)
+            }
+        }
+    }
+    
+    func fetchTweetsByUser(forUser user: TwitterUser, completion: @escaping([Tweet]) -> Void) {
+        var tweets = [Tweet]()
+        tweets.removeAll()
+        REF_USER_TWEETS.child(user.uid).observe(.childAdded) { snapshot in
+            let tweetId = snapshot.key
+            print("DEBUG: fetchTweetsByUser(uid: \(user.uid), tweetId: \(tweetId)")
+            REF_TWEETS.child(tweetId).observeSingleEvent(of: .value) { tweetSnapshot in
+                guard let dictionary = tweetSnapshot.value as? [String: Any] else { return }
+                guard let uid = dictionary["uid"] as? String else { return }
+                
+                UserService.shared.fetchUser(uid: uid) { user in
+                    let tweet = Tweet(tweetId: tweetId, user: user, dictionary: dictionary)
+                    tweets.append(tweet)
+                    completion(tweets)
+                }
             }
         }
     }

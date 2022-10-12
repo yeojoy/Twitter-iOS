@@ -16,8 +16,6 @@ class FeedViewController: UICollectionViewController {
     
     var user: TwitterUser? {
         didSet {
-            guard let u = user else { return }
-            print("DEBUG: FeedViewController User name is \(u.username)")
             configureLeftBarButton()
         }
     }
@@ -29,17 +27,27 @@ class FeedViewController: UICollectionViewController {
     // MARK: - Lifecycler
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        print("DEBUG: viewDidLoad()")
         configureUI()
         fetchTweets()
+        configureNavibar()
+        configureLeftBarButton()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.barStyle = .default
+        navigationController?.navigationBar.isHidden = false
     }
     
     // MARK: - Helpers
     
     func configureUI() {
-        
-        view.backgroundColor = .white
+        collectionView.backgroundColor = .white
         collectionView.register(TweetCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+    }
+    
+    func configureNavibar() {
         // Top center image
         let imageView = UIImageView(image: UIImage(named: "twitter_logo_blue"))
         imageView.contentMode = .scaleAspectFit
@@ -60,6 +68,10 @@ class FeedViewController: UICollectionViewController {
         
         profileImageView.sd_setImage(with: profileImageUrl)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: profileImageView)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleLeftBarButton))
+        profileImageView.addGestureRecognizer(tap)
+        profileImageView.isUserInteractionEnabled = true
     }
     
     // MARK: - API
@@ -67,6 +79,12 @@ class FeedViewController: UICollectionViewController {
         TweetService.shared.fetchTweets { tweets in
             self.tweets = tweets
         }
+    }
+
+    @objc func handleLeftBarButton() {
+        guard let user = user else { return }
+        let controller = ProfileViewController(user: user)
+        navigationController?.pushViewController(controller, animated: true)
     }
 }
 
@@ -81,6 +99,7 @@ extension FeedViewController {
     // asign item view
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TweetCell
+        cell.delegate = self
         cell.tweet = self.tweets[indexPath.row]
         return cell
     }
@@ -92,5 +111,35 @@ extension FeedViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         // This assigns fixed size. However we need dynamic height. 
         return CGSize(width: view.frame.width, height: 100)
+    }
+}
+
+
+// MARK: - TweetCellDelegateProtocol
+extension FeedViewController: TweetCellDelegate {
+    func handleProfileImageTapped(cell: TweetCell) {
+        guard let user = cell.tweet?.user else { return }
+        let controller = ProfileViewController(user: user)
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func handleCommentTapped(cell: TweetCell) {
+        guard let username = cell.tweet?.user.username else { return }
+        print("DEBUG: - handleCommentTapped() \(username)")
+    }
+    
+    func handleRetweetTapped(cell: TweetCell) {
+        guard let username = cell.tweet?.user.username else { return }
+        print("DEBUG: - handleRetweetTapped() \(username)")
+    }
+    
+    func handleLikeTapped(cell: TweetCell) {
+        guard let username = cell.tweet?.user.username else { return }
+        print("DEBUG: - handleLikeTapped() \(username)")
+    }
+    
+    func handleShareTapped(cell: TweetCell) {
+        guard let username = cell.tweet?.user.username else { return }
+        print("DEBUG: - handleShareTapped() \(username)")
     }
 }

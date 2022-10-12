@@ -14,11 +14,9 @@ struct UserService {
     
     func fetchUser(uid: String?, completion: @escaping(TwitterUser) -> Void) {
         guard let uid = uid else { return }
-        
+        print("DEBUG: fetchUser(uid: \(uid))")
         REF_USERS.child(uid).observeSingleEvent(of: .value) { snapshot in
-            print("DEBUG: Snapshot: \(snapshot.key)")
             guard let dictionary = snapshot.value as? [String: AnyObject] else { return }
-            
             completion(TwitterUser(uid: uid, dict: dictionary))
         }
     }

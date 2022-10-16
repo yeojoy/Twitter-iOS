@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 protocol ProfileHeaderDelegate: AnyObject {
     func handleBackButton()
     
-    func handleEditProfileButton()
-    func handleFollowButton()
+    func handleEditProfileButton(_ profileHeader: ProfileHeader)
+    func handleFollowButton(_ profileHeader: ProfileHeader)
     
     func onFollowingTapped()
     func onFollowersTapped()
@@ -57,7 +58,7 @@ class ProfileHeader: UICollectionReusableView {
         return iv
     }()
     
-    private lazy var editProfileFollowButton: UIButton = {
+    lazy var editProfileFollowButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Loading", for: .normal)
         button.layer.borderColor = UIColor.twitterBlue.cgColor
@@ -192,6 +193,12 @@ class ProfileHeader: UICollectionReusableView {
     @objc func handleEditProfileFollowButton() {
         // TODO: divide edit profile, follow, and following
         print("DEBUG: handleEditProfileFollowButton()")
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        if (uid == self.user?.uid) {
+            delegate?.handleEditProfileButton(self)
+        } else {
+            delegate?.handleFollowButton(self)
+        }
     }
     
     @objc func handleFollowingTapped() {

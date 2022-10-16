@@ -80,6 +80,7 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
     }
+    
     // MARK: - Helpers
     
     func configureUI() {
@@ -127,7 +128,10 @@ class LoginViewController: UIViewController {
             
             // since iOS 16, need to use windowScene to get windows object.
             let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+            // in the view stack, first one is MainTabController, and last is current ViewController,
+            // This case LoginViewController is last.
             guard let window = windowScene?.windows.first(where: { $0.isKeyWindow }) else { return }
+            
             guard let tabController = window.rootViewController as? MainTabController else { return }
             tabController.authenticateUserAndCongifureUI()
             

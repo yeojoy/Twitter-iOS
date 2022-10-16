@@ -27,11 +27,11 @@ struct ProfileHeaderViewModel {
     private let user: TwitterUser
     
     var followersString: NSAttributedString? {
-        return attributedText(withValue: 0, text: "followers")
+        return attributedText(withValue: user.stats?.followers ?? 0, text: "followers")
     }
     
     var followingString: NSAttributedString? {
-        return attributedText(withValue: 2, text: "following")
+        return attributedText(withValue: user.stats?.following ?? 0, text: "following")
     }
     
     var usernameString: String {
@@ -51,7 +51,11 @@ struct ProfileHeaderViewModel {
         if user.isCurrentUser {
             return "Edit Profile"
         } else {
-            return "Follow"
+            if user.isFollowed {
+                return "Following"
+            } else {
+                return "Follow"
+            }
         }
     }
     

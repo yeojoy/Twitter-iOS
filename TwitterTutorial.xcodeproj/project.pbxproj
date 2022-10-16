@@ -30,6 +30,7 @@
 		F46512BD28E3C9F700E1A510 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46512BC28E3C9F700E1A510 /* NotificationViewController.swift */; };
 		F46512BF28E3CA0300E1A510 /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46512BE28E3CA0300E1A510 /* ConversationViewController.swift */; };
 		F46512C128E3CA6700E1A510 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46512C028E3CA6700E1A510 /* FeedViewController.swift */; };
+		F46FD55F28FAF6F800DBDB28 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46FD55E28FAF6F800DBDB28 /* UserCell.swift */; };
 		F479558C28E3FC7B004E6439 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F479558B28E3FC7B004E6439 /* Extensions.swift */; };
 		F49512C028ED1E8200B61E50 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49512BF28ED1E8200B61E50 /* UserService.swift */; };
 		F49512C228ED208800B61E50 /* TwitterUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49512C128ED208800B61E50 /* TwitterUser.swift */; };
@@ -68,6 +69,7 @@
 		F46512BC28E3C9F700E1A510 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		F46512BE28E3CA0300E1A510 /* ConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
 		F46512C028E3CA6700E1A510 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
+		F46FD55E28FAF6F800DBDB28 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		F479558B28E3FC7B004E6439 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		F49512BF28ED1E8200B61E50 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		F49512C128ED208800B61E50 /* TwitterUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterUser.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 				F454D89728F7AD55008DD38D /* ProfileFilterCell.swift */,
 				F43DD7C328F6601600E6EB1D /* ProfileHeader.swift */,
 				F454D89528F7AB85008DD38D /* ProfileFilterView.swift */,
+				F46FD55E28FAF6F800DBDB28 /* UserCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -340,6 +343,7 @@
 				F4D2B43B28EE47FB008123C6 /* CaptionTextView.swift in Sources */,
 				F454D89828F7AD55008DD38D /* ProfileFilterCell.swift in Sources */,
 				F46512BF28E3CA0300E1A510 /* ConversationViewController.swift in Sources */,
+				F46FD55F28FAF6F800DBDB28 /* UserCell.swift in Sources */,
 				F4F9135828E5A4270009965C /* Utilities.swift in Sources */,
 				F465129D28E3C78100E1A510 /* AppDelegate.swift in Sources */,
 				F4C3918128F6598C00F5FC9E /* ProfileViewController.swift in Sources */,

@@ -13,6 +13,8 @@ private let TABLE_TWEETS = "tweets"
 private let TABLE_USER_TWEETS = "user-tweets"
 private let TABLE_FOLLOWERS = "user-followers"
 private let TABLE_FOLLOWING = "user-following"
+private let TABLE_REPLIES = "tweet-replies"
+private let TABLE_LIKES = "tweet-likes"
 
 private let STORAGE_DIR = "profile_images"
 
@@ -27,7 +29,8 @@ let REF_TWEETS = DB_REF.child(TABLE_TWEETS)
 let REF_USER_TWEETS = DB_REF.child(TABLE_USER_TWEETS)
 let REF_USER_FOLLOWERS = DB_REF.child(TABLE_FOLLOWERS)
 let REF_USER_FOLLOWING = DB_REF.child(TABLE_FOLLOWING)
-
+let REF_TWEET_REPLIES = DB_REF.child(TABLE_REPLIES)
+let REF_TWEET_LIKES = DB_REF.child(TABLE_LIKES)
 
 // Realtime Table Field
 let DB_FIELD_USERNAME = "username"
@@ -40,4 +43,3 @@ let DB_FILED_TIMESTAMP = "timestamp"
 let DB_FILED_LIKES = "likes"
 let DB_FILED_RETWEETS = "retweets"
 let DB_FILED_CAPTION = "caption"
-

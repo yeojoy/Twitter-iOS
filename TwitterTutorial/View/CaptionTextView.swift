@@ -26,7 +26,8 @@ class CaptionTextView: UITextView {
         backgroundColor = .white
         font = UIFont.systemFont(ofSize: 18)
         isScrollEnabled = true
-        heightAnchor.constraint(equalToConstant: 300).isActive = true
+        // The bug is I set the height with 300, but it's not assigned like that.
+        heightAnchor.constraint(equalToConstant: 100).isActive = true
         
         addSubview(placeHolderLabel)
         placeHolderLabel.anchor(top: topAnchor, left: leftAnchor, paddingTop: 8, paddingLeft: 4)

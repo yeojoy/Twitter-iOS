@@ -165,7 +165,7 @@ extension ProfileViewController: TweetCellDelegate {
         navigationController?.pushViewController(controller, animated: true)
     }
     
-    func handleCommentTapped(cell: TweetCell) {
+    func handleReplyTapped(cell: TweetCell) {
         guard let username = cell.tweet?.user.username else { return }
         print("DEBUG: - handleCommentTapped() \(username)")
     }

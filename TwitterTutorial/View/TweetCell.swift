@@ -9,7 +9,7 @@ import UIKit
 
 protocol TweetCellDelegate: AnyObject {
     func handleProfileImageTapped(cell: TweetCell)
-    func handleCommentTapped(cell: TweetCell)
+    func handleReplyTapped(cell: TweetCell)
     func handleRetweetTapped(cell: TweetCell)
     func handleLikeTapped(cell: TweetCell)
     func handleShareTapped(cell: TweetCell)
@@ -48,7 +48,7 @@ class TweetCell: UICollectionViewCell {
     
     private let infoLabel = UILabel()
     
-    private lazy var commentButton: UIButton = {
+    private lazy var replyButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "comment"), for: .normal)
         button.tintColor = .darkGray
@@ -94,8 +94,8 @@ class TweetCell: UICollectionViewCell {
     
     // MARK: - Selectors
     
-    @objc func handleCommentTapped() {
-        delegate?.handleCommentTapped(cell: self)
+    @objc func handleReplyTapped() {
+        delegate?.handleReplyTapped(cell: self)
     }
     
     @objc func handleRetweetTapped() {
@@ -134,14 +134,14 @@ class TweetCell: UICollectionViewCell {
         addSubview(underlineView)
         underlineView.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor,  height: 1)
         
-        let actionStack = UIStackView(arrangedSubviews: [commentButton, retweetButton, likeButton, shareButton])
+        let actionStack = UIStackView(arrangedSubviews: [replyButton, retweetButton, likeButton, shareButton])
         actionStack.axis = .horizontal
         actionStack.spacing = 72
         addSubview(actionStack)
         actionStack.centerX(inView: self)
         actionStack.anchor(bottom: bottomAnchor, paddingBottom: 8)
         
-        commentButton.addTarget(self, action: #selector(handleCommentTapped), for: .touchUpInside)
+        replyButton.addTarget(self, action: #selector(handleReplyTapped), for: .touchUpInside)
         retweetButton.addTarget(self, action: #selector(handleRetweetTapped), for: .touchUpInside)
         likeButton.addTarget(self, action: #selector(handleLikeTapped), for: .touchUpInside)
         shareButton.addTarget(self, action: #selector(handleShareTapped), for: .touchUpInside)

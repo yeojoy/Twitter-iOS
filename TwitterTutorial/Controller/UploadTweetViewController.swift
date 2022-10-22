@@ -7,11 +7,18 @@
 
 import UIKit
 
+enum UploadTweetConfiguration {
+    case tweet
+    case reply(Tweet)
+}
+
 class UploadTweetViewController: UIViewController {
     
     // MARK: - Properties
     
     private let user: TwitterUser
+    private let config: UploadTweetConfiguration
+    private lazy var viewModel = UploadTweetViewModel(config: config)
     
     private let actionButton: UIButton = {
         let button = UIButton(type: .system)
@@ -34,12 +41,22 @@ class UploadTweetViewController: UIViewController {
         return iv
     }()
     
+    private lazy var replyLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.text = "replying to @spiderman"
+        label.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+        label.textColor = .lightGray
+        return label
+    }()
+    
     private let captionTextView = CaptionTextView()
     
     // MARK: - Lifecycler
     
-    init(user: TwitterUser) {
+    init(user: TwitterUser, config: UploadTweetConfiguration) {
         self.user = user
+        self.config = config
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -51,7 +68,12 @@ class UploadTweetViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
         
-        print("DEBUG: UploadTweetViewContoller: user is \(user.username)")
+        switch config {
+            case .tweet:
+                print("DEBUG: Config is tweet")
+            case .reply(let tweet):
+                print("Debug: Config is tweet to \(tweet.caption)")
+        }
     }
     
     // MARK: - Helpers
@@ -60,15 +82,25 @@ class UploadTweetViewController: UIViewController {
         view.backgroundColor = .white
         configureNavigationBar()
         
-        let stack = UIStackView(arrangedSubviews: [profileImageView, captionTextView])
-        stack.axis = .horizontal
+        let imageCaptionStack = UIStackView(arrangedSubviews: [profileImageView, captionTextView])
+        imageCaptionStack.axis = .horizontal
+        imageCaptionStack.spacing = 12
+        // This is solution for assigning caption view's height
+        imageCaptionStack.alignment = .leading
+        
+        let stack = UIStackView(arrangedSubviews: [replyLabel, imageCaptionStack])
+        stack.axis = .vertical
         stack.spacing = 12
         
-        captionTextView.placeHolderLabel.text = "Hello world!"
         view.addSubview(stack)
         stack.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 16, paddingLeft: 16, paddingRight: 16)
         
         profileImageView.sd_setImage(with: user.profileImageUrl)
+        actionButton.setTitle(viewModel.actionButtonTitle, for: .normal)
+        captionTextView.placeHolderLabel.text = viewModel.placeholderText
+        replyLabel.isHidden = !viewModel.shouldShowReplyLabel
+        guard let replyText = viewModel.replyText else { return }
+        replyLabel.text = replyText
     }
     
     func configureNavigationBar() {
@@ -89,13 +121,25 @@ class UploadTweetViewController: UIViewController {
     
     @objc func handleUploadTweet() {
         guard let caption = captionTextView.text else { return }
-        TweetService.shared.uploadTweet(caption: caption) { error, ref in
-            if let error = error {
-                print("DEBUG: Failed to upload tweet with error \(error.localizedDescription)")
-                return
-            }
-            
-            self.dismiss(animated: true, completion: nil)
+        switch config {
+            case .tweet:
+                TweetService.shared.uploadTweet(caption: caption) { error, ref in
+                    if let error = error {
+                        print("DEBUG: Failed to upload tweet with error \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    self.dismiss(animated: true, completion: nil)
+                }
+            case .reply(let tweet):
+                TweetService.shared.uploadReply(caption: caption, tweetId: tweet.tweetId) { error, ref in
+                    if let error = error {
+                        print("DEBUG: Failed to upload tweet with error \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    self.dismiss(animated: true, completion: nil)
+                }
         }
     }
 }

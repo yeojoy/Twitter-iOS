@@ -11,21 +11,21 @@ import FirebaseAuth
 struct TweetService {
     static let shared = TweetService()
     
-    func uploadTweet(caption: String, completion: @escaping(Error?, DatabaseReference) -> Void) {
+    func uploadTweet(caption: String, completion: @escaping((Error?, DatabaseReference) -> Void)) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        let timestamp = Int(NSDate().timeIntervalSince1970) * 1000 // make seconds milliseconds.
-        let values = [
-            DB_FILED_USER_ID: uid,
-            DB_FILED_TIMESTAMP: timestamp,
-            DB_FILED_LIKES: 0,
-            DB_FILED_RETWEETS: 0,
-            DB_FILED_CAPTION: caption
-        ] as [String: Any]
+        let values = createTweetDictionary(caption: caption, userId: uid)
         
         REF_TWEETS.childByAutoId().updateChildValues(values) { (err, ref) in
             guard let tweetId = ref.key else { return }
             REF_USER_TWEETS.child(uid).updateChildValues([tweetId: 1], withCompletionBlock: completion)
         }
+    }
+    
+    func uploadReply(caption: String, tweetId: String, completion: @escaping((Error?, DatabaseReference) -> Void)) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let values = createTweetDictionary(caption: caption, userId: uid)
+        
+        REF_TWEET_REPLIES.child(tweetId).childByAutoId().updateChildValues(values, withCompletionBlock: completion)
     }
     
     func fetchTweets(completion: @escaping([Tweet]) -> Void) {
@@ -62,5 +62,31 @@ struct TweetService {
                 }
             }
         }
+    }
+    
+    func fetchReplies(forTweet tweet: Tweet, completion: @escaping([Tweet]) -> Void) {
+        var replies = [Tweet]()
+        REF_TWEET_REPLIES.child(tweet.tweetId).observe(.childAdded) { snapshot in
+            guard let dictionary = snapshot.value as? [String: Any] else { return }
+            guard let uid = dictionary["uid"] as? String else { return }
+            let tweetId = snapshot.key
+            
+            UserService.shared.fetchUser(uid: uid) { user in
+                let tweet = Tweet(tweetId: tweetId, user: user, dictionary: dictionary)
+                replies.append(tweet)
+                completion(replies)
+            }
+        }
+    }
+    
+    private func createTweetDictionary(caption: String, userId: String) -> Dictionary<String, Any> {
+        let timestamp = Int(NSDate().timeIntervalSince1970) * 1000 // make seconds milliseconds.
+        return [
+            DB_FILED_USER_ID: userId,
+            DB_FILED_TIMESTAMP: timestamp,
+            DB_FILED_LIKES: 0,
+            DB_FILED_RETWEETS: 0,
+             DB_FILED_CAPTION: caption
+        ]
     }
 }

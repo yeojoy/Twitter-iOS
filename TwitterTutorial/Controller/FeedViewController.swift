@@ -103,14 +103,26 @@ extension FeedViewController {
         cell.tweet = self.tweets[indexPath.row]
         return cell
     }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // it was called when the user clicks an item
+        
+        let controller = TweetViewController(tweet: tweets[indexPath.row])
+        navigationController?.pushViewController(controller, animated: true)
+    }
 }
 
 
 // MARK: - UICollectionViewDelegateFlowLayout
 extension FeedViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let tweet = tweets[indexPath.row]
+        let viewModel = TweetViewModel(tweet: tweet)
+        let height = viewModel.size(forWidth: view.frame.width).height
+        
+        print("DEBUG: Feed row height: \(height)")
         // This assigns fixed size. However we need dynamic height. 
-        return CGSize(width: view.frame.width, height: 100)
+        return CGSize(width: view.frame.width, height: height + 72)
     }
 }
 
@@ -123,9 +135,13 @@ extension FeedViewController: TweetCellDelegate {
         navigationController?.pushViewController(controller, animated: true)
     }
     
-    func handleCommentTapped(cell: TweetCell) {
-        guard let username = cell.tweet?.user.username else { return }
-        print("DEBUG: - handleCommentTapped() \(username)")
+    func handleReplyTapped(cell: TweetCell) {
+        guard let tweet = cell.tweet else { return }
+
+        let controller = UploadTweetViewController(user: tweet.user, config: .reply(tweet))
+        let nav = UINavigationController(rootViewController: controller)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true, completion: nil)
     }
     
     func handleRetweetTapped(cell: TweetCell) {

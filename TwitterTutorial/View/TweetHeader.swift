@@ -11,6 +11,7 @@ private let PROFILE_IMAGE_SIZE = CGFloat(48)
 
 protocol TweetHeaderDelegate: AnyObject {
     func onProfileImageTapped(_ header: TweetHeader)
+    func showActionSheet()
 }
 
 class TweetHeader: UICollectionReusableView {
@@ -150,9 +151,10 @@ class TweetHeader: UICollectionReusableView {
         
         let actionStack = UIStackView(arrangedSubviews: [commentButton, retweetButton, likeButton, shareButton])
         actionStack.axis = .horizontal
-        actionStack.distribution = .fillEqually
+        actionStack.spacing = 72
         addSubview(actionStack)
-        actionStack.anchor(top: statsView.bottomAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 16)
+        actionStack.centerX(inView: self)
+        actionStack.anchor(top: statsView.bottomAnchor, paddingTop: 16)
         
         // assign event
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleProfileImageTapped))
@@ -170,14 +172,14 @@ class TweetHeader: UICollectionReusableView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+     
     // MARK: - Selector
     @objc private func handleProfileImageTapped() {
-        print("DEBUG: Go to user profile")
+        delegate?.onProfileImageTapped(self)
     }
     
     @objc private func showActionSheet() {
-        print("DEBUG: Handle show action sheet.")
+        delegate?.showActionSheet()
     }
     
     @objc private func handleCommentTapped() {

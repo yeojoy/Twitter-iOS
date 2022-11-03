@@ -14,6 +14,7 @@ class TweetViewController: UICollectionViewController {
     
     // MARK: - Properties
     private let tweet: Tweet
+    private var actionSheetLauncher: ActionSheetLauncher!
     private var replies = [Tweet]() {
         didSet {
             collectionView.reloadData()
@@ -47,11 +48,35 @@ class TweetViewController: UICollectionViewController {
         collectionView.register(TweetCell.self, forCellWithReuseIdentifier: reuseIdentifier)
     }
     
+    fileprivate func showActionSheet(forUser user: TwitterUser) {
+        actionSheetLauncher = ActionSheetLauncher(user: user)
+        actionSheetLauncher.delegate = self
+        actionSheetLauncher.show()
+    }
+    
     // MARK: - API
     
     func fetchReplies() {
         TweetService.shared.fetchReplies(forTweet: tweet) { replies in
             self.replies = replies
+        }
+    }
+    
+    func followUser(user: TwitterUser) {
+        UserService.shared.followUser(uid: user.uid) { error, ref in
+            if let error = error {
+                print("DEBUG: error -> \(error.localizedDescription)")
+                return
+            }
+        }
+    }
+    
+    func unfollowUser(user: TwitterUser) {
+        UserService.shared.unfollowUser(uid: user.uid) { error, ref in
+            if let error = error {
+                print("DEBUG: error -> \(error.localizedDescription)")
+                return
+            }
         }
     }
 }
@@ -74,6 +99,7 @@ extension TweetViewController {
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerIdentifier, for: indexPath) as! TweetHeader
         header.tweet = tweet
+        header.delegate = self
         return header
     }
 }
@@ -92,5 +118,43 @@ extension TweetViewController: UICollectionViewDelegateFlowLayout {
         let captionHeight = viewModel.size(forWidth: view.frame.width).height
         return CGSize(width: view.frame.width, height: captionHeight + 72)
     }
+}
+
+// MARK: - TweetHeaderDelegate
+extension TweetViewController: TweetHeaderDelegate {
+
+    func showActionSheet() {
+        if tweet.user.isCurrentUser {
+            showActionSheet(forUser: tweet.user)
+        } else {
+            UserService.shared.checkIfUserIsFollowed(uid: tweet.user.uid) { isFollowed in
+                var user = self.tweet.user
+                user.isFollowed = isFollowed
+                self.showActionSheet(forUser: user)
+            }
+        }
+    }
     
+    func onProfileImageTapped(_ header: TweetHeader) {
+        guard let user = header.tweet?.user else { return }
+        let controller = ProfileViewController(user: user)
+        navigationController?.pushViewController(controller, animated: true)
+    }
+}
+
+// MARK: - ActionSheetLauncherDelegate
+
+extension TweetViewController : ActionSheetLauncherDelegate {
+    func didSelect(option: ActionSheetOptions) {
+        switch option {
+            case .follow(let user):
+                followUser(user: user)
+            case .unfollow(let user):
+                unfollowUser(user: user)
+            case .delete:
+                print("DEBUG: .delete")
+            case .report:
+                print("DEBUG: .report")
+        }
+    }
 }

@@ -54,6 +54,11 @@ class TweetViewController: UICollectionViewController {
         actionSheetLauncher.show()
     }
     
+    fileprivate func showProfileScreen(user: TwitterUser) {
+        let controller = ProfileViewController(user: user)
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
     // MARK: - API
     
     func fetchReplies() {
@@ -137,8 +142,7 @@ extension TweetViewController: TweetHeaderDelegate {
     
     func onProfileImageTapped(_ header: TweetHeader) {
         guard let user = header.tweet?.user else { return }
-        let controller = ProfileViewController(user: user)
-        navigationController?.pushViewController(controller, animated: true)
+        showProfileScreen(user: user)
     }
 }
 
@@ -156,5 +160,33 @@ extension TweetViewController : ActionSheetLauncherDelegate {
             case .report:
                 print("DEBUG: .report")
         }
+    }
+}
+
+// MARK: - TweetCellDelegate
+extension TweetViewController : TweetCellDelegate {
+    func handleProfileImageTapped(cell: TweetCell) {
+        guard let user = cell.tweet?.user else { return }
+        showProfileScreen(user: user)
+    }
+    
+    func handleReplyTapped(cell: TweetCell) {
+        guard let tweet = cell.tweet else { return }
+        let controller = UploadTweetViewController(user: tweet.user, config: .reply(tweet))
+        let nav = UINavigationController(rootViewController: controller)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true)
+    }
+    
+    func handleRetweetTapped(cell: TweetCell) {
+        
+    }
+    
+    func handleLikeTapped(cell: TweetCell) {
+        print("DEBUG: handle like tapped. \(String(describing: cell.tweet?.caption))")
+    }
+    
+    func handleShareTapped(cell: TweetCell) {
+        
     }
 }

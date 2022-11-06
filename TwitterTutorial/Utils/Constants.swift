@@ -11,10 +11,12 @@ import FirebaseStorage
 private let TABLE_USERS = "users"
 private let TABLE_TWEETS = "tweets"
 private let TABLE_USER_TWEETS = "user-tweets"
-private let TABLE_FOLLOWERS = "user-followers"
-private let TABLE_FOLLOWING = "user-following"
-private let TABLE_REPLIES = "tweet-replies"
-private let TABLE_LIKES = "tweet-likes"
+private let TABLE_USER_FOLLOWERS = "user-followers"
+private let TABLE_USER_FOLLOWING = "user-following"
+private let TABLE_USER_LIKES = "user-likes"
+
+private let TABLE_TWEET_REPLIES = "tweet-replies"
+private let TABLE_TWEET_LIKES = "tweet-likes"
 
 private let STORAGE_DIR = "profile_images"
 
@@ -26,11 +28,14 @@ let STORAGE_PROFILE_IMAGES = STORAGE_REF.child(STORAGE_DIR)
 private let DB_REF = Database.database().reference()
 let REF_USERS = DB_REF.child(TABLE_USERS)
 let REF_TWEETS = DB_REF.child(TABLE_TWEETS)
+
 let REF_USER_TWEETS = DB_REF.child(TABLE_USER_TWEETS)
-let REF_USER_FOLLOWERS = DB_REF.child(TABLE_FOLLOWERS)
-let REF_USER_FOLLOWING = DB_REF.child(TABLE_FOLLOWING)
-let REF_TWEET_REPLIES = DB_REF.child(TABLE_REPLIES)
-let REF_TWEET_LIKES = DB_REF.child(TABLE_LIKES)
+let REF_USER_FOLLOWERS = DB_REF.child(TABLE_USER_FOLLOWERS)
+let REF_USER_FOLLOWING = DB_REF.child(TABLE_USER_FOLLOWING)
+let REF_USER_LIKES = DB_REF.child(TABLE_USER_LIKES)
+
+let REF_TWEET_REPLIES = DB_REF.child(TABLE_TWEET_REPLIES)
+let REF_TWEET_LIKES = DB_REF.child(TABLE_TWEET_LIKES)
 
 // Realtime Table Field
 let DB_FIELD_USERNAME = "username"

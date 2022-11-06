@@ -12,7 +12,7 @@ struct TwitterUser {
     let username: String
     let email: String
     let fullname: String
-    let profileImageUrl: URL?
+    var profileImageUrl: URL?
     let uid: String
     var isFollowed = false
     var stats: UserRelationStats?

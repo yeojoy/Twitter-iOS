@@ -79,6 +79,35 @@ struct TweetService {
         }
     }
     
+    func likeTweet(tweet: Tweet, completion: @escaping(DatabaseCompletion)) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let likes = tweet.didLike ? tweet.likes - 1 : tweet.likes + 1
+        
+        // 1. update likes count in tweet
+        REF_TWEETS.child(tweet.tweetId).child("likes").setValue(likes)
+        
+        // 2. update user-likes and tweet-likes table
+        if tweet.didLike {
+            // unlike tweet. remove like data from realtime db
+            REF_USER_LIKES.child(uid).child(tweet.tweetId).removeValue { (err, ref) in
+                REF_TWEET_LIKES.child(tweet.tweetId).child(uid).removeValue(completionBlock: completion)
+            }
+        } else {
+            // like tweet. add like data to db
+            REF_USER_LIKES.child(uid).updateChildValues([tweet.tweetId: 1]) { (err, ref) in
+                REF_TWEET_LIKES.child(tweet.tweetId).updateChildValues([uid: 1], withCompletionBlock: completion)
+            }
+        }
+    }
+    
+    func checkIfUserLikedTweet(_ tweet: Tweet, completion: @escaping(Bool) -> Void) {
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        REF_USER_LIKES.child(currentUid).child(tweet.tweetId).observeSingleEvent(of: .value) { snapshot in
+            completion(snapshot.exists())
+        }
+    }
+    
     private func createTweetDictionary(caption: String, userId: String) -> Dictionary<String, Any> {
         let timestamp = Int(NSDate().timeIntervalSince1970) * 1000 // make seconds milliseconds.
         return [

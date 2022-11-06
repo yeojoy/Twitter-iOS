@@ -159,5 +159,8 @@ class TweetCell: UICollectionViewCell {
         captionLabel.text = tweet.caption
         // TO assign attributedText, please use attributedText
         infoLabel.attributedText = viewModel.userInfoText
+        
+        likeButton.tintColor = viewModel.likeButtonTintColor
+        likeButton.setImage(viewModel.likeButtonImage, for: .normal)
     }
 }

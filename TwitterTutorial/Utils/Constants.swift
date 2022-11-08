@@ -18,6 +18,9 @@ private let TABLE_USER_LIKES = "user-likes"
 private let TABLE_TWEET_REPLIES = "tweet-replies"
 private let TABLE_TWEET_LIKES = "tweet-likes"
 
+private let TABLE_NOTIFICATIONS = "notifications"
+private let TABLE_MESSAGES = "messages"
+
 private let STORAGE_DIR = "profile_images"
 
 // Firebase Storage
@@ -37,6 +40,8 @@ let REF_USER_LIKES = DB_REF.child(TABLE_USER_LIKES)
 let REF_TWEET_REPLIES = DB_REF.child(TABLE_TWEET_REPLIES)
 let REF_TWEET_LIKES = DB_REF.child(TABLE_TWEET_LIKES)
 
+let REF_NOTIFICATIONS = DB_REF.child(TABLE_NOTIFICATIONS)
+
 // Realtime Table Field
 let DB_FIELD_USERNAME = "username"
 let DB_FIELD_FULLNAME = "fullname"
@@ -48,3 +53,5 @@ let DB_FILED_TIMESTAMP = "timestamp"
 let DB_FILED_LIKES = "likes"
 let DB_FILED_RETWEETS = "retweets"
 let DB_FILED_CAPTION = "caption"
+let DB_FIELD_TWEET_ID = "TweetId"
+let DB_FIELD_TYPE = "type"

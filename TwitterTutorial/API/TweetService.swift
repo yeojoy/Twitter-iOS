@@ -34,7 +34,7 @@ struct TweetService {
         
         REF_TWEETS.observe(.childAdded) { snapshot in
             guard let dictionary = snapshot.value as? [String: Any] else { return }
-            guard let uid = dictionary["uid"] as? String else { return }
+            guard let uid = dictionary[DB_FILED_USER_ID] as? String else { return }
             let tweetId = snapshot.key
             
             UserService.shared.fetchUser(uid: uid) { user in
@@ -53,7 +53,7 @@ struct TweetService {
             print("DEBUG: fetchTweetsByUser(uid: \(user.uid), tweetId: \(tweetId)")
             REF_TWEETS.child(tweetId).observeSingleEvent(of: .value) { tweetSnapshot in
                 guard let dictionary = tweetSnapshot.value as? [String: Any] else { return }
-                guard let uid = dictionary["uid"] as? String else { return }
+                guard let uid = dictionary[DB_FILED_USER_ID] as? String else { return }
                 
                 UserService.shared.fetchUser(uid: uid) { user in
                     let tweet = Tweet(tweetId: tweetId, user: user, dictionary: dictionary)
@@ -68,7 +68,7 @@ struct TweetService {
         var replies = [Tweet]()
         REF_TWEET_REPLIES.child(tweet.tweetId).observe(.childAdded) { snapshot in
             guard let dictionary = snapshot.value as? [String: Any] else { return }
-            guard let uid = dictionary["uid"] as? String else { return }
+            guard let uid = dictionary[DB_FILED_USER_ID] as? String else { return }
             let tweetId = snapshot.key
             
             UserService.shared.fetchUser(uid: uid) { user in
@@ -85,7 +85,7 @@ struct TweetService {
         let likes = tweet.didLike ? tweet.likes - 1 : tweet.likes + 1
         
         // 1. update likes count in tweet
-        REF_TWEETS.child(tweet.tweetId).child("likes").setValue(likes)
+        REF_TWEETS.child(tweet.tweetId).child(DB_FILED_LIKES).setValue(likes)
         
         // 2. update user-likes and tweet-likes table
         if tweet.didLike {

@@ -139,6 +139,7 @@ extension FeedViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - TweetCellDelegateProtocol
 extension FeedViewController: TweetCellDelegate {
+    
     func handleProfileImageTapped(cell: TweetCell) {
         guard let user = cell.tweet?.user else { return }
         let controller = ProfileViewController(user: user)
@@ -160,14 +161,18 @@ extension FeedViewController: TweetCellDelegate {
     }
     
     func handleLikeTapped(cell: TweetCell) {
-//        cell.tweet?.didLike.toggle()
-//        print("DEBUG: Tweet is liked is \(cell.tweet?.didLike)")
         guard let tweet = cell.tweet else { return }
         
         TweetService.shared.likeTweet(tweet: tweet) { (err, ref) in
             cell.tweet?.didLike.toggle()
             let likes = tweet.didLike ? tweet.likes - 1 : tweet.likes + 1
             cell.tweet?.likes = likes
+            
+            // only upload notifictaion if tweet is being liked
+            guard cell.tweet?.didLike == true else { return }
+            NotificationService.shared.uploadNotification(type: .like, tweet: cell.tweet)/* { (err, ref) in
+                 
+            }*/
         }
     }
     

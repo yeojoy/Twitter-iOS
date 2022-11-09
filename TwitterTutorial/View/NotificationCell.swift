@@ -68,9 +68,10 @@ class NotificationCell : UITableViewCell {
     
     private func configure() {
         guard let noti = notification else { return }
-        notificationLabel.text = "\(noti.user.username) started following you!"
+        let viewModel = NotificationViewModel(notification: noti)
+        notificationLabel.attributedText = viewModel.notificationText
         
-        profileImageView.sd_setImage(with: noti.user.profileImageUrl)
+        profileImageView.sd_setImage(with: viewModel.profileImageUrl)
     }
     
     // MARK: - Seletors

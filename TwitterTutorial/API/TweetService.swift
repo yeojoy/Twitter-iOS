@@ -45,6 +45,19 @@ struct TweetService {
         }
     }
     
+    func fetchTweet(withTweetId tweetId: String, completion: @escaping(Tweet) -> Void) {
+        REF_TWEETS.child(tweetId).observeSingleEvent(of: .value, with: { snapshot in
+            guard let dictionary = snapshot.value as? [String: Any] else { return }
+            guard let uid = dictionary[DB_FILED_USER_ID] as? String else { return }
+            let tweetId = snapshot.key
+            
+            UserService.shared.fetchUser(uid: uid) { user in
+                let tweet = Tweet(tweetId: tweetId, user: user, dictionary: dictionary)
+                completion(tweet)
+            }
+        })
+    }
+    
     func fetchTweetsByUser(forUser user: TwitterUser, completion: @escaping([Tweet]) -> Void) {
         var tweets = [Tweet]()
         tweets.removeAll()
